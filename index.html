@@ -873,7 +873,6 @@
       <a href="#flow">How It Works</a>
       <a href="#preview">A File</a>
       <a href="#episode">The Show</a>
-      <a href="#capture" id="methodology-link">Methodology</a>
       <a href="#faq">FAQ</a>
     </div>
     <a href="#capture" class="nav-cta">Notify Me ▸</a>
@@ -884,7 +883,7 @@
 
   <!-- ============ HERO ============ -->
   <section class="hero">
-    <div class="hero-tag">▌ Public Notice</div>
+    <div class="hero-tag">▌ Public Notice — Pre-Launch</div>
     <h1 class="hero-title">
       Don't <span class="strike">Record</span><br>
       <span class="line2">Record Me.</span>
@@ -924,7 +923,7 @@
     </div>
 
     <p class="asym-conclusion">
-      Don't Record Me is the first <strong>public, editorial registry</strong> of this asymmetry. We collect the receipts the companies left in the open, match them against verified consumer testimony, and publish the pattern.
+      Don't Record Me is the first <strong>public, editorial registry</strong> of this asymmetry. We collect the evidentiary breadcrumbs the companies left in the open, match them against verified consumer testimony, and publish the pattern.
     </p>
   </section>
 
@@ -1035,7 +1034,7 @@
       <span class="meta">What an entry looks like</span>
     </div>
     <h2 class="section-headline">Each file is a brief.<br><span class="accent">Built to be cited.</span></h2>
-    <p class="section-deck">A draft preview of what a published entry looks like. Company, tier, four pillars of evidence, verification methodology, and the episode. Replace "American Express" with any of the dozens of companies our submitters have named.</p>
+    <p class="section-deck">A draft preview of what a published entry looks like. Company, tier, four pillars of evidence, verification methodology, and the episode. Replace "American Excess" with any of the dozens of companies our submitters have named.</p>
 
     <div class="preview">
       <div class="preview-chrome">
@@ -1049,7 +1048,7 @@
 
         <div class="preview-head">
           <div>
-            <div class="preview-company">American<br>Express</div>
+            <div class="preview-company">American<br>Excess</div>
             <p class="preview-summary">Records all inbound customer calls. Refuses customer recording. No documented opt-out mechanism. 14 verified submissions corroborate the pattern.</p>
           </div>
           <div class="preview-tier">
@@ -1085,7 +1084,7 @@
         </div>
 
         <div class="preview-aside">
-          <strong>Notice what's missing:</strong> raw uploaded audio. The "audio" of this entry is the editorial podcast episode. Submitter testimony is sworn. Amex's IVR was captured by our editorial team in a one-party-consent state. <strong>Everything documented here was lawfully obtained.</strong>
+          <strong>Notice what's missing:</strong> raw uploaded audio. The "audio" of this entry is the editorial podcast episode. Submitter testimony is sworn. The IVR was captured by our editorial team in a one-party-consent state. <strong>Everything documented here was lawfully obtained.</strong>
         </div>
 
       </div>
@@ -1105,13 +1104,13 @@
     <div class="episode-card">
       <div class="episode-eyebrow">EPISODE 001 · COMING WITH LAUNCH</div>
       <h3 class="episode-title">"Princess from <span class="accent">the Philippines"</span></h3>
-      <p class="episode-deck">Betty stepped away while her phone dialed Amex. Missed the IVR disclosure. Asked the rep — Princess, in a Manila call center — whether the call was being recorded. Princess said no. The IVR said yes. What happens next is the registry's first file.</p>
+      <p class="episode-deck">Betty stepped away while her phone dialed the card company. Missed the IVR disclosure. Asked the rep — Princess, in a Manila call center — whether the call was being recorded. Princess said no. The IVR said yes. What happens next is the registry's first file.</p>
 
       <div class="episode-player">
         <button class="play-btn" aria-label="Preview episode">▶</button>
         <div class="play-meta">
           <strong>Hosts: Sarah &amp; Marcus</strong>
-          <span>22 MIN ▸ FILE 001 ▸ AMERICAN EXPRESS</span>
+          <span>22 MIN ▸ FILE 001 ▸ AMERICAN EXCESS</span>
         </div>
         <div class="waveform">
           <i style="height:30%"></i><i style="height:60%"></i><i style="height:80%"></i><i style="height:45%"></i><i style="height:70%"></i><i style="height:90%"></i><i style="height:55%"></i><i style="height:35%"></i><i style="height:75%"></i><i style="height:50%"></i><i style="height:85%"></i><i style="height:40%"></i><i style="height:65%"></i><i style="height:30%"></i><i style="height:75%"></i><i style="height:60%"></i><i style="height:45%"></i><i style="height:80%"></i>
@@ -1175,9 +1174,8 @@
       <div class="capture-grid">
         <div>
           <div class="capture-eyebrow">Launch Notification</div>
-          <h2 id="capture-headline">Be on the <span class="accent">list</span> before they are.</h2>
-          <p id="capture-body">The legal architecture is done. The editorial standards are published. The first three files are in production. When they ship, submissions open to verified members — and you're already on the list.</p>
-          <p id="methodology-prompt" style="display:none; margin-top:16px; padding:14px 18px; border:2px dashed var(--paper); font-size:14px; color:var(--paper); line-height:1.5;">▌ The full methodology — our four tiers, five-gate verification protocol, right-to-comment process, and limitations — is available to subscribers. Enter your email and it'll be in your first drop.</p>
+          <h2>Be on the <span class="accent">list</span> before they are.</h2>
+          <p>The legal architecture is done. The editorial standards are published. The first three files are in production. When they ship, submissions open to verified members — and you're already on the list.</p>
         </div>
         <div>
           <form id="signup-form">
@@ -1271,15 +1269,6 @@
     links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
   }
 
-  // Methodology link — show prompt and scroll to capture
-  const methLink = document.getElementById('methodology-link');
-  if (methLink) {
-    methLink.addEventListener('click', (e) => {
-      document.getElementById('methodology-prompt').style.display = 'block';
-      document.querySelector('input[type="email"]').focus();
-    });
-  }
-
   // Supabase + Form
   const SUPABASE_URL = 'https://jqagwwgdnrwhscwjjske.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxYWd3d2dkbnJ3aHNjd2pqc2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMDA1MDksImV4cCI6MjA5Mzc3NjUwOX0.kBUlqZ46zBevZkY3Eb8WQfkivC09QhxiiN6K-UU6TtU';
@@ -1309,14 +1298,6 @@
           btn.disabled = false;
           setTimeout(() => { btn.textContent = originalText; }, 3000);
         } else {
-          fetch('https://jqagwwgdnrwhscwjjske.supabase.co/functions/v1/send-welcome-email', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxYWd3d2dkbnJ3aHNjd2pqc2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMDA1MDksImV4cCI6MjA5Mzc3NjUwOX0.kBUlqZ46zBevZkY3Eb8WQfkivC09QhxiiN6K-UU6TtU'
-            },
-            body: JSON.stringify({ email: email })
-          }).catch(() => {});
           form.style.display = 'none';
           document.getElementById('success').classList.add('shown');
         }
