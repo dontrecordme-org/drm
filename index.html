@@ -6,7 +6,7 @@
 <title>Don't Record Me — The Public Registry of One-Sided Recording</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --paper: #f4e734;
@@ -452,6 +452,54 @@
     letter-spacing: 0.1em;
   }
   .tier-pill-meta { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mid); }
+
+  /* ============ HANDWRITTEN CALLOUT ============ */
+  .preview-head { position: relative; }
+  .scrawl {
+    position: absolute;
+    top: 4px;
+    right: 130px;
+    width: 240px;
+    pointer-events: none;
+    z-index: 4;
+    transform: rotate(-5deg);
+    transform-origin: top left;
+  }
+  .scrawl-note {
+    font-family: 'Caveat', 'Comic Sans MS', cursive;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1;
+    color: var(--stamp);
+    letter-spacing: -0.005em;
+    text-align: left;
+    text-shadow: 0 0 1px rgba(200,32,44,0.15);
+  }
+  .scrawl-arrow {
+    width: 110px;
+    height: 70px;
+    display: block;
+    margin-top: 4px;
+    margin-left: -10px;
+  }
+  .scrawl-arrow path {
+    fill: none;
+    stroke: var(--stamp);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  @media (max-width: 920px) {
+    .scrawl {
+      position: static;
+      transform: rotate(-3deg);
+      width: auto;
+      max-width: 280px;
+      margin: 0 0 14px;
+    }
+    .scrawl-note { font-size: 24px; }
+    .scrawl-arrow { width: 56px; height: 44px; margin-left: 12px; }
+  }
 
   .preview-stats {
     display: grid;
@@ -1047,6 +1095,13 @@
         <div class="preview-meta">▌ FILED 2026 · CASE 001 · INDUSTRY: FINANCIAL SERVICES</div>
 
         <div class="preview-head">
+          <div class="scrawl" aria-hidden="true">
+            <div class="scrawl-note">(legal made us<br>do this)</div>
+            <svg class="scrawl-arrow" viewBox="0 0 110 70" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 100 4 Q 92 22, 76 32 T 44 48 Q 28 54, 12 60" />
+              <path d="M 22 50 L 10 60 L 22 66" />
+            </svg>
+          </div>
           <div>
             <div class="preview-company">American<br>Excess</div>
             <p class="preview-summary">Records all inbound customer calls. Refuses customer recording. No documented opt-out mechanism. 14 verified submissions corroborate the pattern.</p>
