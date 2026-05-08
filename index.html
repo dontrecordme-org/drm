@@ -873,6 +873,7 @@
       <a href="#flow">How It Works</a>
       <a href="#preview">A File</a>
       <a href="#episode">The Show</a>
+      <a href="#capture" id="methodology-link">Methodology</a>
       <a href="#faq">FAQ</a>
     </div>
     <a href="#capture" class="nav-cta">Notify Me ▸</a>
@@ -1174,8 +1175,9 @@
       <div class="capture-grid">
         <div>
           <div class="capture-eyebrow">Launch Notification</div>
-          <h2>Be on the <span class="accent">list</span> before they are.</h2>
-          <p>The legal architecture is done. The editorial standards are published. The first three files are in production. When they ship, submissions open to verified members — and you're already on the list.</p>
+          <h2 id="capture-headline">Be on the <span class="accent">list</span> before they are.</h2>
+          <p id="capture-body">The legal architecture is done. The editorial standards are published. The first three files are in production. When they ship, submissions open to verified members — and you're already on the list.</p>
+          <p id="methodology-prompt" style="display:none; margin-top:16px; padding:14px 18px; border:2px dashed var(--paper); font-size:14px; color:var(--paper); line-height:1.5;">▌ The full methodology — our four tiers, five-gate verification protocol, right-to-comment process, and limitations — is available to subscribers. Enter your email and it'll be in your first drop.</p>
         </div>
         <div>
           <form id="signup-form">
@@ -1267,6 +1269,15 @@
   if (toggle) {
     toggle.addEventListener('click', () => links.classList.toggle('open'));
     links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+  }
+
+  // Methodology link — show prompt and scroll to capture
+  const methLink = document.getElementById('methodology-link');
+  if (methLink) {
+    methLink.addEventListener('click', (e) => {
+      document.getElementById('methodology-prompt').style.display = 'block';
+      document.querySelector('input[type="email"]').focus();
+    });
   }
 
   // Supabase + Form
