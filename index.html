@@ -1252,6 +1252,7 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
   // FAQ toggle
   document.querySelectorAll('.faq-q').forEach(btn => {
@@ -1268,13 +1269,43 @@
     links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
   }
 
-  // Form
+  // Supabase + Form
+  const SUPABASE_URL = 'https://jqagwwgdnrwhscwjjske.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_wtJ0eh_4kY0B6Qh3uLGP2w_Fq7y3a0v';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   const form = document.getElementById('signup-form');
   if (form) {
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      form.style.display = 'none';
-      document.getElementById('success').classList.add('shown');
+      const email = form.querySelector('input[type="email"]').value.trim();
+      const btn = form.querySelector('button');
+      const originalText = btn.textContent;
+      btn.textContent = 'Logging...';
+      btn.disabled = true;
+
+      try {
+        const { error } = await sb
+          .from('subscribers')
+          .insert({ email: email, source: 'landing' });
+
+        if (error && error.code === '23505') {
+          // Duplicate email — still show success (don't reveal who's subscribed)
+          form.style.display = 'none';
+          document.getElementById('success').classList.add('shown');
+        } else if (error) {
+          btn.textContent = 'Error — try again';
+          btn.disabled = false;
+          setTimeout(() => { btn.textContent = originalText; }, 3000);
+        } else {
+          form.style.display = 'none';
+          document.getElementById('success').classList.add('shown');
+        }
+      } catch (err) {
+        btn.textContent = 'Error — try again';
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = originalText; }, 3000);
+      }
     });
   }
 </script>
