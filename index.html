@@ -454,33 +454,31 @@
   .tier-pill-meta { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mid); }
 
   /* ============ HANDWRITTEN CALLOUT ============ */
-  .preview-head { position: relative; }
+  /* Anchored to the headline element itself so the arrow always lands on EXCESS */
+  .preview-company { position: relative; display: inline-block; }
   .scrawl {
     position: absolute;
-    top: 4px;
-    right: 130px;
-    width: 240px;
+    left: calc(100% - 8px);
+    bottom: 6px;
+    width: max-content;
     pointer-events: none;
     z-index: 4;
-    transform: rotate(-5deg);
-    transform-origin: top left;
-  }
-  .scrawl-note {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    transform: rotate(-2deg);
+    transform-origin: bottom left;
     font-family: 'Caveat', 'Comic Sans MS', cursive;
-    font-weight: 700;
-    font-size: 30px;
+    font-size: 32px;
     line-height: 1;
-    color: var(--stamp);
-    letter-spacing: -0.005em;
-    text-align: left;
-    text-shadow: 0 0 1px rgba(200,32,44,0.15);
+    letter-spacing: normal;
   }
   .scrawl-arrow {
-    width: 110px;
-    height: 70px;
+    width: 90px;
+    height: 50px;
     display: block;
-    margin-top: 4px;
-    margin-left: -10px;
+    flex-shrink: 0;
+    margin-bottom: 4px;
   }
   .scrawl-arrow path {
     fill: none;
@@ -489,16 +487,35 @@
     stroke-linecap: round;
     stroke-linejoin: round;
   }
-  @media (max-width: 920px) {
+  .scrawl-note {
+    font-family: 'Caveat', 'Comic Sans MS', cursive;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--stamp);
+    letter-spacing: -0.005em;
+    text-align: left;
+    text-shadow: 0 0 1px rgba(200,32,44,0.15);
+    white-space: nowrap;
+  }
+  /* Tablet — slightly smaller so it doesn't crowd the Tier pill */
+  @media (max-width: 1100px) {
+    .scrawl-note { font-size: 26px; }
+    .scrawl-arrow { width: 70px; height: 42px; }
+  }
+  /* Mobile — collapse to a static block below the headline so nothing overflows */
+  @media (max-width: 720px) {
+    .preview-company { display: block; }
     .scrawl {
       position: static;
-      transform: rotate(-3deg);
-      width: auto;
-      max-width: 280px;
-      margin: 0 0 14px;
+      transform: rotate(-2deg);
+      transform-origin: top left;
+      margin: 8px 0 12px;
+      flex-direction: row;
+      align-items: center;
     }
     .scrawl-note { font-size: 24px; }
-    .scrawl-arrow { width: 56px; height: 44px; margin-left: 12px; }
+    .scrawl-arrow { width: 56px; height: 36px; }
   }
 
   .preview-stats {
@@ -1095,15 +1112,8 @@
         <div class="preview-meta">▌ FILED 2026 · CASE 001 · INDUSTRY: FINANCIAL SERVICES</div>
 
         <div class="preview-head">
-          <div class="scrawl" aria-hidden="true">
-            <div class="scrawl-note">(legal made us<br>do this)</div>
-            <svg class="scrawl-arrow" viewBox="0 0 110 70" xmlns="http://www.w3.org/2000/svg">
-              <path d="M 100 4 Q 92 22, 76 32 T 44 48 Q 28 54, 12 60" />
-              <path d="M 22 50 L 10 60 L 22 66" />
-            </svg>
-          </div>
           <div>
-            <div class="preview-company">American<br>Excess</div>
+            <div class="preview-company">American<br>Excess<span class="scrawl" aria-hidden="true"><svg class="scrawl-arrow" viewBox="0 0 90 50" xmlns="http://www.w3.org/2000/svg"><path d="M 84 30 Q 70 24, 54 28 T 22 36 Q 14 38, 8 40" /><path d="M 22 30 L 6 40 L 22 48" /></svg><span class="scrawl-note">(legal made us<br>do this)</span></span></div>
             <p class="preview-summary">Records all inbound customer calls. Refuses customer recording. No documented opt-out mechanism. 14 verified submissions corroborate the pattern.</p>
           </div>
           <div class="preview-tier">
