@@ -1309,6 +1309,14 @@
           btn.disabled = false;
           setTimeout(() => { btn.textContent = originalText; }, 3000);
         } else {
+          fetch('https://jqagwwgdnrwhscwjjske.supabase.co/functions/v1/send-welcome-email', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxYWd3d2dkbnJ3aHNjd2pqc2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMDA1MDksImV4cCI6MjA5Mzc3NjUwOX0.kBUlqZ46zBevZkY3Eb8WQfkivC09QhxiiN6K-UU6TtU'
+            },
+            body: JSON.stringify({ email: email })
+          }).catch(() => {});
           form.style.display = 'none';
           document.getElementById('success').classList.add('shown');
         }
