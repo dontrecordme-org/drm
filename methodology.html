@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Methodology — Don't Record Me</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4e734;
+    --paper-deep: #e8d520;
+    --paper-soft: #faf2a8;
+    --ink: #0a0a0a;
+    --ink-soft: #1a1a1a;
+    --ink-mid: #4a4a4a;
+    --ink-low: #6a6a6a;
+    --rule: #0a0a0a;
+    --stamp: #c8202c;
+    --good: #2d6b2d;
+    --warn: #b8861a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.13) 1px, transparent 0);
+    background-size: 3px 3px;
+    mix-blend-mode: multiply;
+    z-index: 1;
+    opacity: 0.4;
+  }
+
+  /* ============ NAV (same as landing) ============ */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .nav-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .nav-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .nav-brand .dot {
+    width: 8px; height: 8px;
+    background: var(--stamp);
+    border-radius: 50%;
+    animation: blink 1.4s steps(2) infinite;
+  }
+  @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.2; } }
+  .nav-back {
+    color: var(--paper);
+    text-decoration: none;
+    opacity: 0.7;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .nav-back:hover { opacity: 1; }
+  .nav-cta {
+    background: var(--paper);
+    color: var(--ink);
+    padding: 8px 16px;
+    text-decoration: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+  }
+  .nav-cta:hover { background: var(--stamp); color: var(--paper); }
+
+  /* ============ FRAME ============ */
+  .frame {
+    position: relative;
+    z-index: 3;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 56px 48px 100px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 56px;
+  }
+
+  /* ============ TOC SIDEBAR ============ */
+  .toc {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    font-size: 11px;
+    line-height: 1.5;
+    border-left: 2px solid var(--ink);
+    padding: 4px 0 4px 14px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+  }
+  .toc-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--ink-mid);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .toc ol {
+    list-style: none;
+    counter-reset: toc;
+  }
+  .toc li {
+    counter-increment: toc;
+    margin-bottom: 8px;
+    padding-left: 28px;
+    position: relative;
+  }
+  .toc li::before {
+    content: "§" counter(toc, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--stamp);
+    font-weight: 700;
+    font-size: 10px;
+  }
+  .toc a {
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.15s;
+  }
+  .toc a:hover { color: var(--stamp); }
+  .toc a.active { color: var(--stamp); font-weight: 700; }
+
+  /* ============ MAIN CONTENT ============ */
+  main { max-width: 720px; }
+
+  /* Cover */
+  .cover { margin-bottom: 64px; }
+  .file-tag {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 5px 12px;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  h1.title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 0.92;
+    letter-spacing: 0.005em;
+    margin-bottom: 16px;
+  }
+  h1.title .accent { color: var(--stamp); }
+  .subtitle {
+    font-family: 'Special Elite', monospace;
+    font-size: 18px;
+    line-height: 1.45;
+    margin-bottom: 24px;
+    color: var(--ink-soft);
+  }
+  .meta-strip {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 12px 0;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+  .meta-strip strong { color: var(--ink); }
+
+  /* Section */
+  section { margin-bottom: 64px; scroll-margin-top: 80px; }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 3.6vw, 40px);
+    line-height: 1;
+    letter-spacing: 0.005em;
+    margin-bottom: 8px;
+    padding-top: 8px;
+  }
+  h2 .num {
+    color: var(--stamp);
+    margin-right: 12px;
+  }
+
+  h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+    margin: 28px 0 10px;
+  }
+
+  .lede {
+    font-family: 'Special Elite', monospace;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    padding-left: 16px;
+    border-left: 3px solid var(--stamp);
+  }
+
+  p { margin-bottom: 16px; }
+  p strong { background: var(--ink); color: var(--paper); padding: 1px 6px; font-weight: 400; }
+  p em { font-style: normal; border-bottom: 2px solid var(--stamp); padding-bottom: 1px; }
+
+  /* Numbered protocol list */
+  .protocol {
+    list-style: none;
+    counter-reset: protocol;
+    margin: 16px 0 24px;
+  }
+  .protocol li {
+    counter-increment: protocol;
+    padding: 14px 16px 14px 56px;
+    position: relative;
+    border-left: 2px solid var(--ink);
+    margin-bottom: 6px;
+    background: var(--paper-soft);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .protocol li::before {
+    content: counter(protocol, decimal-leading-zero);
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--stamp);
+    line-height: 1;
+  }
+  .protocol li strong { background: transparent; color: var(--ink); padding: 0; font-weight: 700; }
+
+  /* Definition list */
+  .defs {
+    border-top: 1px solid var(--ink);
+    margin: 16px 0 24px;
+  }
+  .defs > div {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--ink);
+    font-size: 14px;
+  }
+  .defs dt {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+  .defs dd { line-height: 1.55; }
+
+  /* Tier table */
+  .tier-table {
+    border: 2px solid var(--ink);
+    margin: 16px 0 24px;
+    background: var(--paper-soft);
+  }
+  .tier-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    border-bottom: 1px solid var(--ink);
+  }
+  .tier-row:last-child { border-bottom: none; }
+  .tier-id {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 18px 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    text-align: center;
+    line-height: 1.05;
+    letter-spacing: 0.05em;
+  }
+  .tier-id small {
+    display: block;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--paper-deep);
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 4px;
+    font-weight: 700;
+  }
+  .tier-content { padding: 16px 18px; }
+  .tier-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .tier-claim {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .tier-evidence {
+    font-size: 12px;
+    line-height: 1.5;
+    border-top: 1px dotted var(--ink);
+    padding-top: 8px;
+  }
+  .tier-evidence strong {
+    background: transparent;
+    color: var(--stamp);
+    padding: 0;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* Note box */
+  .note {
+    background: var(--paper-soft);
+    border: 2px dashed var(--stamp);
+    padding: 18px 22px;
+    margin: 24px 0;
+    font-family: 'Special Elite', monospace;
+    font-size: 14px;
+    line-height: 1.55;
+    position: relative;
+  }
+  .note::before {
+    content: "▸ NOTE";
+    position: absolute;
+    top: -10px; left: 14px;
+    background: var(--paper);
+    padding: 0 8px;
+    color: var(--stamp);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+  }
+  .note strong { background: var(--ink); color: var(--paper); padding: 1px 6px; font-weight: 400; }
+
+  /* Limitations callout */
+  .limit {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 24px 26px;
+    margin: 24px 0;
+  }
+  .limit-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--stamp);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .limit p {
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .limit p:last-child { margin-bottom: 0; }
+  .limit p strong { background: var(--paper); color: var(--ink); padding: 1px 6px; font-weight: 400; }
+
+  /* Footer */
+  footer {
+    border-top: 3px solid var(--ink);
+    padding-top: 24px;
+    margin-top: 48px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  footer .quote {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 880px) {
+    .frame { grid-template-columns: 1fr; padding: 40px 24px 60px; gap: 32px; }
+    .toc { position: static; max-height: none; }
+    .defs > div { grid-template-columns: 1fr; gap: 4px; }
+    .tier-row { grid-template-columns: 64px 1fr; }
+    .tier-id { font-size: 18px; padding: 14px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand"><span class="dot"></span>DON'T RECORD ME</a>
+    <a href="/" class="nav-back">◂ Back to homepage</a>
+    <a href="/#capture" class="nav-cta">Notify Me ▸</a>
+  </div>
+</nav>
+
+<div class="frame">
+
+  <!-- ============ TOC SIDEBAR ============ -->
+  <aside class="toc">
+    <div class="toc-label">Methodology</div>
+    <ol>
+      <li><a href="#purpose">Purpose &amp; Scope</a></li>
+      <li><a href="#definitions">Definitions</a></li>
+      <li><a href="#tiers">The Four Tiers</a></li>
+      <li><a href="#protocol">Verification Protocol</a></li>
+      <li><a href="#right-to-comment">Right to Comment</a></li>
+      <li><a href="#corrections">Corrections</a></li>
+      <li><a href="#limitations">Limitations</a></li>
+      <li><a href="#changelog">Changelog</a></li>
+    </ol>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main>
+
+    <!-- COVER -->
+    <div class="cover">
+      <div class="file-tag">▌ Editorial Standards · Public Document</div>
+      <h1 class="title">Methodology<span class="accent">.</span></h1>
+      <p class="subtitle">How a submission becomes a file. The standards every entry passes before it ships, and the standards we hold ourselves to after.</p>
+      <div class="meta-strip">
+        <div>VERSION: <strong>1.0</strong></div>
+        <div>EFFECTIVE: <strong>Pre-Launch 2026</strong></div>
+        <div>STATUS: <strong style="color:var(--stamp);">IN EFFECT</strong></div>
+      </div>
+    </div>
+
+    <!-- §1 PURPOSE -->
+    <section id="purpose">
+      <h2><span class="num">§01</span>Purpose &amp; Scope</h2>
+      <p class="lede">This document is the editorial standard for Don't Record Me. It governs what enters the registry, how claims are verified, how named parties may respond, and how the public record is maintained. It is intended to be cited.</p>
+
+      <p>Don't Record Me is a public, editorial registry of one-sided recording practices among consumer-facing organizations. Every entry — what we call a <em>file</em> — is the result of a documented investigative process. We are not a complaint forum. We are not a user-generated review platform. We are a journalism-grade public record.</p>
+
+      <p>This methodology is published openly because <strong>a registry only matters if it can be audited</strong>. Companies named in our files have a right to understand the standard their conduct was measured against. Journalists, researchers, and attorneys citing our work have a right to know how we got there. Consumers contributing testimony have a right to know what we will and will not do with their words.</p>
+
+      <h3>What's in scope</h3>
+      <p>Customer service interactions involving recording or monitoring of voice communications — most often phone calls, but also video calls, voice-driven kiosks, and voice-enabled chat. The asymmetry we document is between the company's recording behavior and the customer's stated or implied right to reciprocate.</p>
+
+      <h3>What's out of scope</h3>
+      <p>Workplace monitoring of company employees by their own employer. Public surveillance. Recordings made for security or fraud-prevention purposes that do not involve customer-facing service. Disputes that are primarily about call quality, hold times, or product complaints rather than recording asymmetry.</p>
+    </section>
+
+    <!-- §2 DEFINITIONS -->
+    <section id="definitions">
+      <h2><span class="num">§02</span>Definitions</h2>
+      <p class="lede">Terms that appear throughout this document and across published files. Where a term has a contested meaning in law, we note our editorial usage.</p>
+
+      <dl class="defs">
+        <div>
+          <dt>File</dt>
+          <dd>A published entry in the registry, naming a single company or organization, classified into one of four tiers, with associated evidence and editorial commentary.</dd>
+        </div>
+        <div>
+          <dt>Submission</dt>
+          <dd>An individual contribution from a verified member, in the form of structured sworn testimony. Submissions become evidence; they do not become files on their own.</dd>
+        </div>
+        <div>
+          <dt>One-sided recording</dt>
+          <dd>Any practice in which a company records, monitors, or stores a customer interaction without offering the customer a meaningful, symmetrical right to do the same.</dd>
+        </div>
+        <div>
+          <dt>Reciprocity refusal</dt>
+          <dd>An explicit statement by a company representative, IVR system, or written policy declining to permit customer recording while continuing to record the customer.</dd>
+        </div>
+        <div>
+          <dt>Verified member</dt>
+          <dd>A subscriber whose identity has been confirmed through email + secondary identity check. Members may publish pseudonymously; we always know who they are.</dd>
+        </div>
+        <div>
+          <dt>Right to comment</dt>
+          <dd>The fourteen-day window during which a named company may submit a response to a draft file before publication. Responses are incorporated into the public record.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- §3 THE FOUR TIERS -->
+    <section id="tiers">
+      <h2><span class="num">§03</span>The Four Tiers</h2>
+      <p class="lede">Every published file is classified into one of four tiers. Each tier has a distinct claim and a distinct evidentiary standard. Tier assignment is editorial judgment, applied consistently, and may be revised on appeal.</p>
+
+      <div class="tier-table">
+
+        <div class="tier-row">
+          <div class="tier-id">I<small>TIER</small></div>
+          <div class="tier-content">
+            <div class="tier-name">Disclosed but Forbidden</div>
+            <div class="tier-claim">Company discloses its own recording but actively refuses or sanctions customer recording of the same call.</div>
+            <div class="tier-evidence">
+              <strong>▌ Required Evidence</strong>
+              IVR disclosure independently captured by the editorial team. Three or more verified submissions documenting reciprocity refusal. At least one written policy excerpt or representative statement.
+            </div>
+          </div>
+        </div>
+
+        <div class="tier-row">
+          <div class="tier-id">II<small>TIER</small></div>
+          <div class="tier-content">
+            <div class="tier-name">Opt-Out Denied</div>
+            <div class="tier-claim">Customer requests not to be recorded. Company has no mechanism to honor the request, yet continues the call and the recording.</div>
+            <div class="tier-evidence">
+              <strong>▌ Required Evidence</strong>
+              Three or more verified submissions documenting denied opt-out attempts. Editorial confirmation that no published opt-out path exists. Written policy excerpt where available.
+            </div>
+          </div>
+        </div>
+
+        <div class="tier-row">
+          <div class="tier-id">III<small>TIER</small></div>
+          <div class="tier-content">
+            <div class="tier-name">Undisclosed Capture</div>
+            <div class="tier-claim">Recording occurs without timely, meaningful disclosure to the customer at the time of the call.</div>
+            <div class="tier-evidence">
+              <strong>▌ Highest evidentiary bar.</strong>
+              Direct documentation of an absence of disclosure (e.g., editorial test calls). Three or more independent corroborating submissions. Written policy that confirms recording without confirming disclosure protocol. Counsel review required before publication.
+            </div>
+          </div>
+        </div>
+
+        <div class="tier-row">
+          <div class="tier-id">IV<small>TIER</small></div>
+          <div class="tier-content">
+            <div class="tier-name">Asymmetric Application</div>
+            <div class="tier-claim">Company applies materially different recording or consent practices in different jurisdictions in a manner that disadvantages the customer.</div>
+            <div class="tier-evidence">
+              <strong>▌ Required Evidence</strong>
+              Submissions from at least two distinct jurisdictions showing differential treatment. Editorial test calls from each jurisdiction. Written policy or terms of service from each jurisdiction where applicable.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="note">
+        <strong>Tier IV note:</strong> The original draft of this methodology used the term "Jurisdiction Shopping." We replaced it with "Asymmetric Application" because the former implied corporate intent we cannot prove from documentation alone. The factual asymmetry — that practices differ across jurisdictions — is documentable. The motivation is not. This change reflects our commitment to making claims we can defend.
+      </div>
+    </section>
+
+    <!-- §4 VERIFICATION PROTOCOL -->
+    <section id="protocol">
+      <h2><span class="num">§04</span>Verification Protocol</h2>
+      <p class="lede">The five-gate process every submission moves through before becoming part of a published file. No exceptions.</p>
+
+      <ol class="protocol">
+        <li><strong>Identity verification.</strong> Submitter confirms email and provides a secondary identity signal (phone, government ID number stored hashed, or third-party identity verification). State of residence is captured. Anonymous submissions are not accepted.</li>
+
+        <li><strong>Structured testimony under penalty of perjury.</strong> Submission is captured through a fixed schema: company, date, time, channel, what was disclosed by the company, what the submitter said, what the representative said in response. The submitter signs a declaration. Audio uploads are not accepted.</li>
+
+        <li><strong>Editorial review by two editors.</strong> One editor evaluates the submission against tier criteria. A second editor independently captures the company's IVR disclosure and sources publicly available policy language. Discrepancies are escalated. Single-source claims do not advance.</li>
+
+        <li><strong>Right-to-comment notice.</strong> Once at least three verified submissions corroborate a pattern, a draft file is prepared and sent to the named company with fourteen days to respond. Their response — including a flat denial — is preserved in the public record.</li>
+
+        <li><strong>Publication.</strong> File is published with permanent ID, full evidence record, tier classification, and company response (or noted non-response). A podcast episode is produced and published in tandem with the file.</li>
+      </ol>
+
+      <h3>Editorial team composition</h3>
+      <p>Files are reviewed by at least two editors, neither of whom may have been the original recipient of any of the underlying submissions. Editors disclose any commercial, employment, or familial relationship with named companies and recuse themselves from those files.</p>
+
+      <h3>Audio policy</h3>
+      <p>The registry hosts only audio that the editorial team itself lawfully obtained — most commonly IVR captures conducted in one-party-consent jurisdictions by editorial staff who are parties to the call. <strong>We do not host customer-recorded audio.</strong> Submitter testimony is paraphrased in published files and editorial commentary; the submitter's voice is never aired.</p>
+    </section>
+
+    <!-- §5 RIGHT TO COMMENT -->
+    <section id="right-to-comment">
+      <h2><span class="num">§05</span>Right to Comment</h2>
+      <p class="lede">Every named company receives notice and opportunity to respond before publication. This is not optional.</p>
+
+      <p>A draft file, including all evidence the editorial team intends to publish, is delivered to the named company's designated communications contact (where one is publicly listed) or to a customer-facing channel of last resort. The notice clearly identifies itself, states the publication timeline, and provides instructions for response.</p>
+
+      <p>The company has fourteen calendar days to respond. Responses may include a written statement, a correction request supported by evidence, or a flat denial. All responses, including silence, are recorded in the public file. We do not paraphrase or summarize a company response without permission; if a statement is provided, it is published in full or, at the company's request, replaced with a summary they pre-approve.</p>
+
+      <p>Responses received after publication are appended to the file with the date received. They do not retroactively alter the original publication, but they are visible to anyone reading the file thereafter.</p>
+
+      <h3>What right-to-comment is not</h3>
+      <p>It is not an opportunity to negotiate the tier classification or to suppress publication. It is an opportunity to submit on-the-record context. The editorial team retains final classification authority. Companies that disagree with the outcome are directed to the corrections process below.</p>
+    </section>
+
+    <!-- §6 CORRECTIONS -->
+    <section id="corrections">
+      <h2><span class="num">§06</span>Corrections</h2>
+      <p class="lede">Public records have to be correctable. Here's how.</p>
+
+      <p>Any party may submit a correction request through our published correction form. Requests must identify the specific factual claim contested and supply the evidence that supports the correction. Vague disagreements with editorial framing are not corrections; they are appeals, addressed below.</p>
+
+      <p>Correction requests are reviewed by an editor who was not part of the original publication team. If the correction is substantiated, the file is updated, and the change is logged publicly with the date and a brief description. We do not silently update files. <strong>The history of a file is part of its record.</strong></p>
+
+      <h3>Appeals on tier classification</h3>
+      <p>A company that disputes its tier classification may submit an appeal, which is reviewed by a panel of three editors not involved in the original file. If the appeal succeeds, the file's tier is revised and a note is published explaining the change. If the appeal fails, the request and its denial are added to the file for transparency.</p>
+
+      <h3>Removal</h3>
+      <p>Files are not removed from the public record absent a court order, a documented factual error so material that the file's premise collapses, or a verified request from a submitter whose safety has materially changed. Files that are corrected so substantially that the original conclusion no longer holds are marked <em>retracted</em> rather than deleted.</p>
+    </section>
+
+    <!-- §7 LIMITATIONS -->
+    <section id="limitations">
+      <h2><span class="num">§07</span>Limitations</h2>
+      <p class="lede">A methodology is only as honest as the boundaries it admits. Here are ours.</p>
+
+      <div class="limit">
+        <div class="limit-label">▌ LIMITATION 01</div>
+        <p><strong>We are not a court.</strong> Our files document patterns and apply editorial judgment. They are not legal findings. Companies appearing in the registry have not been adjudged to have violated any law, and our use of any tier label does not imply otherwise.</p>
+      </div>
+
+      <div class="limit">
+        <div class="limit-label">▌ LIMITATION 02</div>
+        <p><strong>We rely on submitter testimony.</strong> Our verification process is rigorous, but every file ultimately rests on what real people told us happened to them. Memory is imperfect. Customer service interactions are stressful. We mitigate this with the three-source minimum, sworn declarations, and corroborating editorial evidence — but we cannot eliminate it.</p>
+      </div>
+
+      <div class="limit">
+        <div class="limit-label">▌ LIMITATION 03</div>
+        <p><strong>Companies change.</strong> A file reflects the practices documented at the time of publication. Companies that revise their practices may petition for re-evaluation under our appeals process, and successful petitions result in updated files.</p>
+      </div>
+
+      <div class="limit">
+        <div class="limit-label">▌ LIMITATION 04</div>
+        <p><strong>U.S. focus, expanding.</strong> Our initial tier criteria and evidentiary standards are calibrated to U.S. consumer-protection and recording-consent law. We accept submissions about non-U.S. companies but apply lower-confidence labels until our methodology is extended to those jurisdictions in collaboration with local counsel.</p>
+      </div>
+    </section>
+
+    <!-- §8 CHANGELOG -->
+    <section id="changelog">
+      <h2><span class="num">§08</span>Changelog</h2>
+      <p class="lede">Every revision to this methodology is recorded. Old versions remain available.</p>
+
+      <dl class="defs">
+        <div>
+          <dt>v1.0 — pre-launch</dt>
+          <dd>Initial publication. Four-tier system established. Five-gate verification protocol defined. Tier IV renamed from "Jurisdiction Shopping" to "Asymmetric Application" per editorial review.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="quote">"This methodology may be read for quality and training purposes."</div>
+      <div>© 2026 Don't Record Me ▸ Methodology v1.0</div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  // Highlight active TOC entry on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const tocLinks = document.querySelectorAll('.toc a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(a => a.classList.remove('active'));
+        const link = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
