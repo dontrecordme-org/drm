@@ -45,7 +45,6 @@
     opacity: 0.4;
   }
 
-  /* ============ NAV (same as landing) ============ */
   .nav {
     position: sticky;
     top: 0;
@@ -100,7 +99,6 @@
   }
   .nav-cta:hover { background: var(--stamp); color: var(--paper); }
 
-  /* ============ FRAME ============ */
   .frame {
     position: relative;
     z-index: 3;
@@ -112,7 +110,6 @@
     gap: 56px;
   }
 
-  /* ============ TOC SIDEBAR ============ */
   .toc {
     position: sticky;
     top: 80px;
@@ -162,10 +159,8 @@
   .toc a:hover { color: var(--stamp); }
   .toc a.active { color: var(--stamp); font-weight: 700; }
 
-  /* ============ MAIN CONTENT ============ */
   main { max-width: 720px; }
 
-  /* Cover */
   .cover { margin-bottom: 64px; }
   .file-tag {
     display: inline-block;
@@ -207,7 +202,6 @@
   }
   .meta-strip strong { color: var(--ink); }
 
-  /* Section */
   section { margin-bottom: 64px; scroll-margin-top: 80px; }
 
   h2 {
@@ -245,7 +239,6 @@
   p strong { background: var(--ink); color: var(--paper); padding: 1px 6px; font-weight: 400; }
   p em { font-style: normal; border-bottom: 2px solid var(--stamp); padding-bottom: 1px; }
 
-  /* Numbered protocol list */
   .protocol {
     list-style: none;
     counter-reset: protocol;
@@ -273,7 +266,6 @@
   }
   .protocol li strong { background: transparent; color: var(--ink); padding: 0; font-weight: 700; }
 
-  /* Definition list */
   .defs {
     border-top: 1px solid var(--ink);
     margin: 16px 0 24px;
@@ -294,7 +286,6 @@
   }
   .defs dd { line-height: 1.55; }
 
-  /* Tier table */
   .tier-table {
     border: 2px solid var(--ink);
     margin: 16px 0 24px;
@@ -355,7 +346,6 @@
     margin-bottom: 3px;
   }
 
-  /* Note box */
   .note {
     background: var(--paper-soft);
     border: 2px dashed var(--stamp);
@@ -380,7 +370,6 @@
   }
   .note strong { background: var(--ink); color: var(--paper); padding: 1px 6px; font-weight: 400; }
 
-  /* Limitations callout */
   .limit {
     background: var(--ink);
     color: var(--paper);
@@ -402,7 +391,6 @@
   .limit p:last-child { margin-bottom: 0; }
   .limit p strong { background: var(--paper); color: var(--ink); padding: 1px 6px; font-weight: 400; }
 
-  /* Footer */
   footer {
     border-top: 3px solid var(--ink);
     padding-top: 24px;
@@ -422,7 +410,6 @@
     letter-spacing: 0;
   }
 
-  /* ============ RESPONSIVE ============ */
   @media (max-width: 880px) {
     .frame { grid-template-columns: 1fr; padding: 40px 24px 60px; gap: 32px; }
     .toc { position: static; max-height: none; }
@@ -434,7 +421,24 @@
 </head>
 <body>
 
-<!-- NAV -->
+<!-- ============ EMAIL GATE ============ -->
+<div id="gate" style="position:fixed;inset:0;z-index:999;background:#0a0a0a;color:#f4e734;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;">
+  <div style="max-width:480px;padding:32px;text-align:center;">
+    <div style="font-size:10px;letter-spacing:0.18em;font-weight:700;text-transform:uppercase;color:#c8202c;margin-bottom:24px;">▌ Subscriber Access</div>
+    <h1 style="font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:0.95;margin-bottom:16px;color:#f4e734;">Methodology<span style="color:#c8202c;">.</span></h1>
+    <p style="font-family:'Special Elite',monospace;font-size:16px;line-height:1.5;color:rgba(244,231,52,0.85);margin-bottom:32px;">Our four tiers, five-gate verification protocol, right-to-comment process, and limitations. This document is available to registered subscribers.</p>
+    <div style="display:flex;border:2px solid #f4e734;margin-bottom:12px;">
+      <input type="email" id="gate-email" placeholder="enter your subscriber email" style="flex:1;background:transparent;border:none;outline:none;padding:16px 18px;color:#f4e734;font-family:'JetBrains Mono',monospace;font-size:15px;">
+      <button id="gate-btn" onclick="checkAccess()" style="background:#f4e734;color:#0a0a0a;border:none;padding:0 24px;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:0.1em;cursor:pointer;white-space:nowrap;">Access ▸</button>
+    </div>
+    <div id="gate-error" style="display:none;color:#c8202c;font-size:13px;margin-bottom:16px;text-align:left;"></div>
+    <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(244,231,52,0.5);line-height:1.6;">Not subscribed yet? <a href="/#capture" style="color:#f4e734;text-decoration:underline;">Join the list</a> — you'll get access in your first email.</p>
+  </div>
+</div>
+
+<!-- ============ CONTENT (hidden until verified) ============ -->
+<div id="content" style="display:none;">
+
 <nav class="nav">
   <div class="nav-inner">
     <a href="/" class="nav-brand"><span class="dot"></span>DON'T RECORD ME</a>
@@ -445,7 +449,6 @@
 
 <div class="frame">
 
-  <!-- ============ TOC SIDEBAR ============ -->
   <aside class="toc">
     <div class="toc-label">Methodology</div>
     <ol>
@@ -460,22 +463,19 @@
     </ol>
   </aside>
 
-  <!-- ============ MAIN ============ -->
   <main>
 
-    <!-- COVER -->
     <div class="cover">
-      <div class="file-tag">▌ Editorial Standards · Public Document</div>
+      <div class="file-tag">▌ Editorial Standards · Subscriber Document</div>
       <h1 class="title">Methodology<span class="accent">.</span></h1>
       <p class="subtitle">How a submission becomes a file. The standards every entry passes before it ships, and the standards we hold ourselves to after.</p>
       <div class="meta-strip">
         <div>VERSION: <strong>1.0</strong></div>
-        <div>EFFECTIVE: <strong>Pre-Launch 2026</strong></div>
+        <div>EFFECTIVE: <strong>2026</strong></div>
         <div>STATUS: <strong style="color:var(--stamp);">IN EFFECT</strong></div>
       </div>
     </div>
 
-    <!-- §1 PURPOSE -->
     <section id="purpose">
       <h2><span class="num">§01</span>Purpose &amp; Scope</h2>
       <p class="lede">This document is the editorial standard for Don't Record Me. It governs what enters the registry, how claims are verified, how named parties may respond, and how the public record is maintained. It is intended to be cited.</p>
@@ -491,7 +491,6 @@
       <p>Workplace monitoring of company employees by their own employer. Public surveillance. Recordings made for security or fraud-prevention purposes that do not involve customer-facing service. Disputes that are primarily about call quality, hold times, or product complaints rather than recording asymmetry.</p>
     </section>
 
-    <!-- §2 DEFINITIONS -->
     <section id="definitions">
       <h2><span class="num">§02</span>Definitions</h2>
       <p class="lede">Terms that appear throughout this document and across published files. Where a term has a contested meaning in law, we note our editorial usage.</p>
@@ -524,7 +523,6 @@
       </dl>
     </section>
 
-    <!-- §3 THE FOUR TIERS -->
     <section id="tiers">
       <h2><span class="num">§03</span>The Four Tiers</h2>
       <p class="lede">Every published file is classified into one of four tiers. Each tier has a distinct claim and a distinct evidentiary standard. Tier assignment is editorial judgment, applied consistently, and may be revised on appeal.</p>
@@ -586,7 +584,6 @@
       </div>
     </section>
 
-    <!-- §4 VERIFICATION PROTOCOL -->
     <section id="protocol">
       <h2><span class="num">§04</span>Verification Protocol</h2>
       <p class="lede">The five-gate process every submission moves through before becoming part of a published file. No exceptions.</p>
@@ -610,7 +607,6 @@
       <p>The registry hosts only audio that the editorial team itself lawfully obtained — most commonly IVR captures conducted in one-party-consent jurisdictions by editorial staff who are parties to the call. <strong>We do not host customer-recorded audio.</strong> Submitter testimony is paraphrased in published files and editorial commentary; the submitter's voice is never aired.</p>
     </section>
 
-    <!-- §5 RIGHT TO COMMENT -->
     <section id="right-to-comment">
       <h2><span class="num">§05</span>Right to Comment</h2>
       <p class="lede">Every named company receives notice and opportunity to respond before publication. This is not optional.</p>
@@ -625,7 +621,6 @@
       <p>It is not an opportunity to negotiate the tier classification or to suppress publication. It is an opportunity to submit on-the-record context. The editorial team retains final classification authority. Companies that disagree with the outcome are directed to the corrections process below.</p>
     </section>
 
-    <!-- §6 CORRECTIONS -->
     <section id="corrections">
       <h2><span class="num">§06</span>Corrections</h2>
       <p class="lede">Public records have to be correctable. Here's how.</p>
@@ -641,7 +636,6 @@
       <p>Files are not removed from the public record absent a court order, a documented factual error so material that the file's premise collapses, or a verified request from a submitter whose safety has materially changed. Files that are corrected so substantially that the original conclusion no longer holds are marked <em>retracted</em> rather than deleted.</p>
     </section>
 
-    <!-- §7 LIMITATIONS -->
     <section id="limitations">
       <h2><span class="num">§07</span>Limitations</h2>
       <p class="lede">A methodology is only as honest as the boundaries it admits. Here are ours.</p>
@@ -667,20 +661,18 @@
       </div>
     </section>
 
-    <!-- §8 CHANGELOG -->
     <section id="changelog">
       <h2><span class="num">§08</span>Changelog</h2>
       <p class="lede">Every revision to this methodology is recorded. Old versions remain available.</p>
 
       <dl class="defs">
         <div>
-          <dt>v1.0 — pre-launch</dt>
+          <dt>v1.0 — 2026</dt>
           <dd>Initial publication. Four-tier system established. Five-gate verification protocol defined. Tier IV renamed from "Jurisdiction Shopping" to "Asymmetric Application" per editorial review.</dd>
         </div>
       </dl>
     </section>
 
-    <!-- FOOTER -->
     <footer>
       <div class="quote">"This methodology may be read for quality and training purposes."</div>
       <div>© 2026 Don't Record Me ▸ Methodology v1.0</div>
@@ -690,7 +682,6 @@
 </div>
 
 <script>
-  // Highlight active TOC entry on scroll
   const sections = document.querySelectorAll('section[id]');
   const tocLinks = document.querySelectorAll('.toc a');
   const observer = new IntersectionObserver((entries) => {
@@ -703,6 +694,38 @@
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
   sections.forEach(s => observer.observe(s));
+</script>
+
+</div><!-- end #content -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const sb=window.supabase.createClient('https://jqagwwgdnrwhscwjjske.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxYWd3d2dkbnJ3aHNjd2pqc2tlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMDA1MDksImV4cCI6MjA5Mzc3NjUwOX0.kBUlqZ46zBevZkY3Eb8WQfkivC09QhxiiN6K-UU6TtU');
+if(sessionStorage.getItem('drm_verified')){document.getElementById('gate').style.display='none';document.getElementById('content').style.display='block';}
+document.getElementById('gate-email').addEventListener('keydown',e=>{if(e.key==='Enter')checkAccess();});
+async function checkAccess(){
+  const email=document.getElementById('gate-email').value.trim().toLowerCase();
+  const btn=document.getElementById('gate-btn');
+  const err=document.getElementById('gate-error');
+  if(!email)return;
+  btn.textContent='Checking...';btn.disabled=true;err.style.display='none';
+  try{
+    const{data,error}=await sb.from('subscribers').select('email').eq('email',email).limit(1);
+    if(error)throw error;
+    if(data&&data.length>0){
+      sessionStorage.setItem('drm_verified','true');
+      document.getElementById('gate').style.display='none';
+      document.getElementById('content').style.display='block';
+      window.scrollTo(0,0);
+    }else{
+      err.textContent="▌ That email isn't on the list. Subscribe first — you'll get access in your first drop.";
+      err.style.display='block';btn.textContent='Access ▸';btn.disabled=false;
+    }
+  }catch(e){
+    err.textContent='▌ Something went wrong. Try again.';
+    err.style.display='block';btn.textContent='Access ▸';btn.disabled=false;
+  }
+}
 </script>
 
 </body>
